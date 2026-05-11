@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: tb-automation-db
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: tbautomation
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
