@@ -15,3 +15,7 @@ Thumbs.db
 # Maven
 target/
 *.jar
+
+# Test temp files
+test-files/temp/
+test-files/backup/
