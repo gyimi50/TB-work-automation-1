@@ -12,7 +12,7 @@ public class ToDocxConverter {
             "C:/Program Files/LibreOffice/program/soffice.exe";
 
     public File convert(File inputFile) throws IOException, InterruptedException {
-        File outputDir = new File(inputFile.getParent(), "temp");
+        File outputDir = new File(inputFile.getCanonicalFile().getParent(), "temp");
         outputDir.mkdirs();
 
         ProcessBuilder pb = new ProcessBuilder(
@@ -31,7 +31,9 @@ public class ToDocxConverter {
             throw new IOException("LibreOffice conversion failed with exit code: " + exitCode);
         }
 
-        String docxFileName = inputFile.getName().replace(".odt", ".docx");
+        String originalName = inputFile.getName();
+        String baseName = originalName.substring(0, originalName.lastIndexOf('.'));
+        String docxFileName = baseName + ".docx";
         return new File(outputDir, docxFileName);
     }
 }
