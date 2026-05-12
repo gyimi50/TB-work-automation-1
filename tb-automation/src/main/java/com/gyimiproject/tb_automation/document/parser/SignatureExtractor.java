@@ -30,9 +30,9 @@ public class SignatureExtractor {
                         .toList();
 
                 if (paragraphs.size() >= 2) {
-                    result.append(paragraphs.get(0))  // név
+                    result.append(paragraphs.get(0))
                             .append(" ")
-                            .append(paragraphs.get(1))  // tisztség
+                            .append(paragraphs.get(1))
                             .append("\n");
                 }
             }

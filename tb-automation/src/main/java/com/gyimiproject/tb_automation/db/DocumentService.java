@@ -11,6 +11,9 @@ public class DocumentService {
 
     private final DocumentProcessor documentProcessor;
     private final DisciplinaryCaseRepository repository;
+    public boolean isAlreadyProcessed(String fileName) {
+        return repository.existsByFileName(fileName);
+    }
 
     public DocumentService(DocumentProcessor documentProcessor,
                            DisciplinaryCaseRepository repository) {

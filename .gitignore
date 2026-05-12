@@ -19,3 +19,4 @@ target/
 # Test temp files
 test-files/temp/
 test-files/backup/
+test-files/*.*
