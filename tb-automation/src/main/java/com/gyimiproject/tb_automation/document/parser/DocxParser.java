@@ -29,7 +29,7 @@ public class DocxParser {
                         result.append(text);
                     }
                 }
-                result.append("\n"); // sortörés paragrafusonként
+                result.append("\n");
             }
         }
         return result.toString();

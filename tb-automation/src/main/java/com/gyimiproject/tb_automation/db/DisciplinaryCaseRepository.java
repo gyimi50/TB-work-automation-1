@@ -11,4 +11,5 @@ public interface DisciplinaryCaseRepository
     List<DisciplinaryCase> findByDocumentStatus(
             DisciplinaryCase.DocumentStatus status
     );
+    boolean existsByFileName(String fileName);
 }
