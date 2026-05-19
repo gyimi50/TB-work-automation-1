@@ -26,13 +26,22 @@ public class DisciplinaryCase {
     private String initiatedBy;
     private String teamHome;
     private String teamAway;
-    private LocalDate matchDate;
+    @Column(columnDefinition = "TEXT")
+    private String matchDate;
     private String caseNumber;
     private String personInvolved;
     private String involvedType;
+    @Column(columnDefinition = "TEXT")
     private String affiliation;
+    @Column(columnDefinition = "TEXT")
     private String disciplinaryReason;
     private String regulation;
+    private String matchIdentifier;
+    @Column(columnDefinition = "TEXT")
+    private String caseNumbers;
+    private String downloadUrl;
+    private String localFileName;
+
 
     @Enumerated(EnumType.STRING)
     private DisciplinaryStatus disciplinaryStatus;
@@ -50,6 +59,6 @@ public class DisciplinaryCase {
     }
 
     public enum DocumentStatus {
-        PENDING, POSTED, FAILED
+        PENDING, PROCESSED, POSTED, FAILED, AWAITING_DECISION
     }
 }
