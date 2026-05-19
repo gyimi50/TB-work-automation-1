@@ -8,22 +8,59 @@ import org.springframework.context.annotation.Bean;
 import com.gyimiproject.tb_automation.db.DocumentService;
 import com.gyimiproject.tb_automation.db.DisciplinaryCase;
 import com.gyimiproject.tb_automation.db.FileProcessorService;
+import com.gyimiproject.tb_automation.selenium.base.YamlLocatorReader;
+import com.gyimiproject.tb_automation.selenium.input.InputLoginPage;
+import org.springframework.beans.factory.annotation.Value;
+import com.gyimiproject.tb_automation.selenium.input.InputPageDownload;
+import com.gyimiproject.tb_automation.selenium.DisciplinaryData;
+import java.util.List;
 
 
 
-import java.io.File;
+
 
 @SpringBootApplication
 public class TbAutomationApplication {
+    @Value("${input.username}")
+    private String inputUsername;
+
+    @Value("${input.password}")
+    private String inputPassword;
+
 
     public static void main(String[] args) {
         SpringApplication.run(TbAutomationApplication.class, args);
     }
 
     @Bean
-    public CommandLineRunner run(FileProcessorService fileProcessorService) {
+    public CommandLineRunner run(YamlLocatorReader locatorReader,
+                                 DocumentService documentService) {
         return args -> {
-            fileProcessorService.processDirectory("../test-files");
+            InputLoginPage loginPage = new InputLoginPage(locatorReader);
+            loginPage.login(inputUsername, inputPassword);
+            System.out.println("=== LOGIN DONE ===");
+
+
+            InputPageDownload downloadPage = new InputPageDownload(loginPage.getDriver(), locatorReader);
+            downloadPage.navigateToCaseList();
+            downloadPage.setPageSizeTo100();
+            System.out.println("=== NAVIGATED AND PAGE SIZE SET ===");
+
+//            List<DisciplinaryData> data = downloadPage.collectAndSave();
+//            for (DisciplinaryData d : data) {
+//                documentService.saveFromWeb(d);
+//            }
+//            System.out.println("=== SAVED " + data.size() + " cases to DB ===");
+
+            List<DisciplinaryData> data = downloadPage.collectAndSave();
+            for (DisciplinaryData d : data) {
+                documentService.saveFromWeb(d);
+            }
+            System.out.println("=== SAVED " + data.size() + " cases to DB ===");
+
+// letöltött fájlok feldolgozása
+            documentService.processPendingFiles("../test-files");
+            System.out.println("=== PROCESSING DONE ===");
         };
     }
 }
