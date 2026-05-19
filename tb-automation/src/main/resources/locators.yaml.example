@@ -1,0 +1,13 @@
+input:
+  url: https://your-input-site.com
+  caseListPath: your_subpage_path
+  caseTableClass: your_table_class
+  usernameField: your_username_field
+  passwordField: your_password_field
+  loginButton: your_login_button
+
+output:
+  url: https://your-output-site.com
+  usernameField: your_username_field
+  passwordField: your_password_field
+  loginButton: your_login_button

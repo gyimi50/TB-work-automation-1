@@ -12,4 +12,5 @@ public interface DisciplinaryCaseRepository
             DisciplinaryCase.DocumentStatus status
     );
     boolean existsByFileName(String fileName);
+    boolean existsByMatchCodeAndCaseNumbers(String matchCode, String caseNumbers);
 }
