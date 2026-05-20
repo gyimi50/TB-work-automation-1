@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class DisciplinaryData {
     private String matchCode;
-    private String matchIdentifier;
+    private String leagueCode;
     private String initiatedBy;
     private String teamHome;
     private String teamAway;
@@ -13,7 +13,7 @@ public class DisciplinaryData {
     private String caseNumbers;
     private String personInvolved;
     private String involvedType;
-    private String affiliation;
+    private String organization;
     private String disciplinaryReason;
     private String regulation;
     private String disciplinaryStatus;
