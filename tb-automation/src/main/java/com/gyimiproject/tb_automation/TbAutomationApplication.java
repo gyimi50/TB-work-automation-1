@@ -46,19 +46,11 @@ public class TbAutomationApplication {
             downloadPage.setPageSizeTo100();
             System.out.println("=== NAVIGATED AND PAGE SIZE SET ===");
 
-//            List<DisciplinaryData> data = downloadPage.collectAndSave();
-//            for (DisciplinaryData d : data) {
-//                documentService.saveFromWeb(d);
-//            }
-//            System.out.println("=== SAVED " + data.size() + " cases to DB ===");
-
             List<DisciplinaryData> data = downloadPage.collectAndSave();
             for (DisciplinaryData d : data) {
                 documentService.saveFromWeb(d);
             }
-            System.out.println("=== SAVED " + data.size() + " cases to DB ===");
 
-// letöltött fájlok feldolgozása
             documentService.processPendingFiles("../test-files");
             System.out.println("=== PROCESSING DONE ===");
         };
