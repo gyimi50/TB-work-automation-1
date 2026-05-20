@@ -11,7 +11,6 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.io.InputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -68,7 +67,7 @@ public class InputPageDownload extends BasePage {
                 if (parentTds.size() >= 4) {
                     String[] matchInfo = parentTds.get(0).getText().split("\n");
                     data.setMatchCode(matchInfo[0].trim());
-                    data.setMatchIdentifier(matchInfo.length > 1 ?
+                    data.setLeagueCode(matchInfo.length > 1 ?
                             matchInfo[1].replaceAll("[()]", "").trim() : "");
                     data.setInitiatedBy(parentTds.get(1).getText().trim());
                     data.setTeamHome(parentTds.get(2).getText().split("\n")[0].trim());
@@ -80,14 +79,18 @@ public class InputPageDownload extends BasePage {
 
                 // child row data
                 List<WebElement> childTds = tr.findElements(caseTableCell);
-                if (childTds.size() >= 7) {
-                    data.setCaseNumbers(childTds.get(0).getText().trim());
-                    data.setPersonInvolved(childTds.get(1).getText().trim());
-                    data.setInvolvedType(childTds.get(2).getText().trim());
-                    data.setAffiliation(childTds.get(3).getText().trim());
-                    data.setDisciplinaryReason(childTds.get(4).getText().trim());
-                    data.setRegulation(childTds.get(5).getText().trim());
-                    data.setDisciplinaryStatus(childTds.get(6).getText().trim());
+                if (childTds.size() >= 8) {
+                    String rawCaseNumbers = childTds.get(0).getText().trim();
+                    String caseNumbers = java.util.Arrays.stream(rawCaseNumbers.split("\\s+"))
+                            .filter(s -> s.startsWith("FEGY/"))
+                            .collect(java.util.stream.Collectors.joining("\n"));
+                    data.setCaseNumbers(caseNumbers);
+                    data.setPersonInvolved(childTds.get(2).getText().trim());
+                    data.setInvolvedType(childTds.get(3).getText().trim());
+                    data.setOrganization(childTds.get(4).getText().trim());
+                    data.setDisciplinaryReason(childTds.get(5).getText().trim());
+                    data.setRegulation(childTds.get(6).getText().trim());
+                    data.setDisciplinaryStatus(childTds.get(7).getText().trim());
                 }
 
                 // download
@@ -115,11 +118,9 @@ public class InputPageDownload extends BasePage {
                     try {
                         File downloadDir = new File("../test-files").getCanonicalFile();
 
-                        // request headers first
                         java.net.http.HttpResponse<java.io.InputStream> response = client.send(request,
                                 java.net.http.HttpResponse.BodyHandlers.ofInputStream());
 
-                        // filename from Content-Disposition header
                         String fileName = response.headers()
                                 .firstValue("Content-Disposition")
                                 .map(cd -> cd.replaceAll(".*filename[^;=\n]*=(['\"]?)([^'\"\n]*)\\1", "$2").trim())
@@ -128,8 +129,8 @@ public class InputPageDownload extends BasePage {
                         Path targetPath = downloadDir.toPath().resolve(fileName);
                         Files.copy(response.body(), targetPath,
                                 java.nio.file.StandardCopyOption.REPLACE_EXISTING);
-                        data.setLocalFileName(fileName); // ← ez az új sor
-                        System.out.println("=== DOWNLOADED: " + fileName + " ===");
+                        data.setLocalFileName(fileName);
+
                     } catch (IOException e) {
                         System.out.println("=== DOWNLOAD ERROR: " + e.getMessage() + " ===");
                     }

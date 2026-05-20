@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -20,32 +19,23 @@ public class DisciplinaryCase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String fileName;
     private String matchCode;
-    private Integer disciplinaryCount;
-    private String initiatedBy;
+    private String matchDate;
     private String teamHome;
     private String teamAway;
-    @Column(columnDefinition = "TEXT")
-    private String matchDate;
-    private String caseNumber;
     private String personInvolved;
     private String involvedType;
+    private String disciplinaryStatus;
+    private String leagueCode;
+    private String initiatedBy;
+    private String organization;
     @Column(columnDefinition = "TEXT")
-    private String affiliation;
+    private String caseNumbers;
     @Column(columnDefinition = "TEXT")
     private String disciplinaryReason;
     private String regulation;
-    private String matchIdentifier;
-    @Column(columnDefinition = "TEXT")
-    private String caseNumbers;
     private String downloadUrl;
     private String localFileName;
-
-
-    @Enumerated(EnumType.STRING)
-    private DisciplinaryStatus disciplinaryStatus;
-
     @Column(columnDefinition = "TEXT")
     private String bbcodeContent;
 
@@ -53,10 +43,6 @@ public class DisciplinaryCase {
     private DocumentStatus documentStatus;
 
     private LocalDate processedDate;
-
-    public enum DisciplinaryStatus {
-        NO_DECISION, DECISION_SENT, REJECTED
-    }
 
     public enum DocumentStatus {
         PENDING, PROCESSED, POSTED, FAILED, AWAITING_DECISION

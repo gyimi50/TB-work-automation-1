@@ -21,14 +21,14 @@ public class DocumentService {
     }
 
     public boolean isAlreadyProcessed(String fileName) {
-        return repository.existsByFileName(fileName);
+        return repository.existsByLocalFileName(fileName);
     }
 
     public DisciplinaryCase processAndSave(File file) throws Exception {
         String bbcodeContent = documentProcessor.process(file);
 
         DisciplinaryCase disciplinaryCase = DisciplinaryCase.builder()
-                .fileName(file.getName())
+                .localFileName(file.getName())
                 .bbcodeContent(bbcodeContent)
                 .documentStatus(DisciplinaryCase.DocumentStatus.PENDING)
                 .processedDate(LocalDate.now())
@@ -49,14 +49,14 @@ public class DocumentService {
 
         DisciplinaryCase disciplinaryCase = DisciplinaryCase.builder()
                 .matchCode(data.getMatchCode())
-                .matchIdentifier(data.getMatchIdentifier())
+                .leagueCode(data.getLeagueCode())
                 .initiatedBy(data.getInitiatedBy())
                 .teamHome(data.getTeamHome())
                 .teamAway(data.getTeamAway())
                 .caseNumbers(data.getCaseNumbers())
                 .personInvolved(data.getPersonInvolved())
                 .involvedType(data.getInvolvedType())
-                .affiliation(data.getAffiliation())
+                .organization(data.getOrganization())
                 .disciplinaryReason(data.getDisciplinaryReason())
                 .regulation(data.getRegulation())
                 .localFileName(data.getLocalFileName())
@@ -65,6 +65,8 @@ public class DocumentService {
                         DisciplinaryCase.DocumentStatus.PENDING :
                         DisciplinaryCase.DocumentStatus.AWAITING_DECISION)
                 .processedDate(LocalDate.now())
+                .matchDate(data.getMatchDate())
+                .disciplinaryStatus(data.getDisciplinaryStatus())
                 .build();
 
         return repository.save(disciplinaryCase);
@@ -89,7 +91,7 @@ public class DocumentService {
                 dc.setBbcodeContent(bbcode);
                 dc.setDocumentStatus(DisciplinaryCase.DocumentStatus.PROCESSED);
                 repository.save(dc);
-                System.out.println("Processed: " + dc.getLocalFileName());
+
             } catch (Exception e) {
                 dc.setDocumentStatus(DisciplinaryCase.DocumentStatus.FAILED);
                 repository.save(dc);
