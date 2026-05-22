@@ -13,7 +13,7 @@ Automated document processing and publishing tool built with Java/Spring Boot.
 - Document download and processing (.docx, .odt, .doc)
 - Bold text extraction and BBCode conversion
 - PostgreSQL storage with duplicate detection
-- Automated publishing to output platform
+- Automated publishing to output platform via SMF forum
 
 ## Setup
 
@@ -26,8 +26,10 @@ Create `tb-automation/src/main/resources/application.properties`:
 spring.datasource.url=jdbc:postgresql://localhost:5432/your_db_name
 spring.datasource.username=your_db_username
 spring.datasource.password=your_db_password
-input.username=your_username
-input.password=your_password
+input.username=your_input_username
+input.password=your_input_password
+output.username=your_output_username
+output.password=your_output_password
 ```
 
 Create `tb-automation/src/main/resources/locators.yaml`

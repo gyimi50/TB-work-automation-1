@@ -16,10 +16,12 @@
 - `DocumentProcessor` – orchestrator: coordinates detection, conversion, parsing
 
 ### `selenium` – Browser Automation Layer
-- `BasePage` – abstract base: ChromeDriver init, explicit waits, common actions
+- `BasePage` – abstract base: ChromeDriver init, explicit waits, iframe handling, JS executor
 - `YamlLocatorReader` – reads HTML locators from locators.yaml
-- `InputLoginPage` – handles login on input site
-- `InputPageDownload` – navigates, collects data, downloads files from input site
+- `input/InputPageLogin` – handles login on input site
+- `input/InputPageDownload` – navigates, collects data, downloads files from input site
+- `output/OutputPageLogin` – handles login on output site (SMF forum)
+- `output/OutputPagePost` – navigates forum, finds season topic, submits post
 - `DisciplinaryData` – DTO: holds raw data collected from web before DB persistence
 
 ## Data Flow
@@ -29,9 +31,11 @@ DocumentProcessor → BBCode conversion
 ↓
 PostgreSQL (Docker) → Store records
 ↓
-Output site → Login → Post content (coming soon)
+Output site → Login → Navigate to season topic → Submit post
 
 ## Key Design Decisions
 - **Repository Pattern** – database layer abstracted behind interfaces, easily swappable (e.g. PostgreSQL → Supabase)
 - **Page Object Model** – each web page has its own class, locators stored in YAML
 - **Modular Monolith** – clear separation of concerns without microservice complexity
+- **Separate WebDriver instances** – input and output flows use independent browser sessions
+- **iframe handling** – output site embeds SMF forum in iframe, handled transparently via BasePage
