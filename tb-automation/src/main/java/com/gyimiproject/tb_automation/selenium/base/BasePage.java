@@ -52,6 +52,23 @@ public abstract class BasePage {
         wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(locator, min - 1));
     }
 
+    protected WebElement waitForPresence(By locator) {
+        return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
+    }
+
+    protected void jsClick(By locator) {
+        WebElement element = driver.findElement(locator);
+        ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+    }
+
+    protected void switchToFrame(By locator) {
+        driver.switchTo().frame(waitForElement(locator));
+    }
+
+    protected void switchToDefaultContent() {
+        driver.switchTo().defaultContent();
+    }
+
     protected void click(By locator) {
         waitForElement(locator).click();
     }
