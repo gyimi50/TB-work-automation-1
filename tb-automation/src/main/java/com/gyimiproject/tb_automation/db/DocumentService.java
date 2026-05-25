@@ -7,17 +7,22 @@ import java.io.File;
 import java.util.List;
 import java.time.LocalDate;
 import com.gyimiproject.tb_automation.selenium.DisciplinaryData;
+import com.gyimiproject.tb_automation.selenium.output.OutputPagePost;
+import com.gyimiproject.tb_automation.selenium.base.YamlConfigReader;
 
 @Service
 public class DocumentService {
 
     private final DocumentProcessor documentProcessor;
     private final DisciplinaryCaseRepository repository;
+    private final YamlConfigReader configReader;
 
     public DocumentService(DocumentProcessor documentProcessor,
-                           DisciplinaryCaseRepository repository) {
+                           DisciplinaryCaseRepository repository,
+                           YamlConfigReader configReader) {
         this.documentProcessor = documentProcessor;
         this.repository = repository;
+        this.configReader = configReader;
     }
 
     public boolean isAlreadyProcessed(String fileName) {
@@ -96,6 +101,31 @@ public class DocumentService {
                 dc.setDocumentStatus(DisciplinaryCase.DocumentStatus.FAILED);
                 repository.save(dc);
                 System.out.println("Failed: " + dc.getLocalFileName() + " - " + e.getMessage());
+            }
+        }
+    }
+
+    public void postProcessedCases(OutputPagePost postPage) throws Exception {
+        List<DisciplinaryCase> processed = repository
+                .findByDocumentStatus(DisciplinaryCase.DocumentStatus.PROCESSED);
+
+        System.out.println("=== CASES TO POST: " + processed.size() + " ===");
+
+        for (DisciplinaryCase dc : processed) {
+            try {
+                String involvedTypeOutput = configReader.getInvolvedTypeOutput(dc.getInvolvedType());
+                String title = dc.getPersonInvolved() +
+                        (involvedTypeOutput.isEmpty() ? "" : " " + involvedTypeOutput) +
+                        " (" + dc.getMatchCode() + ")";
+                postPage.submitPost(title, dc.getBbcodeContent());
+                dc.setDocumentStatus(DisciplinaryCase.DocumentStatus.POSTED);
+                repository.save(dc);
+                System.out.println("=== POSTED: " + title + " ===");
+                Thread.sleep(6000);
+            } catch (Exception e) {
+                dc.setDocumentStatus(DisciplinaryCase.DocumentStatus.FAILED);
+                repository.save(dc);
+                System.out.println("=== POST FAILED: " + dc.getMatchCode() + " - " + e.getMessage() + " ===");
             }
         }
     }
