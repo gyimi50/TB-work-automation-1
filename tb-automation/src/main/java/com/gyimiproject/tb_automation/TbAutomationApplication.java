@@ -65,7 +65,10 @@ public class TbAutomationApplication {
 
             OutputPagePost postPage = new OutputPagePost(outputLogin.getDriver(), locatorReader);
             postPage.navigateToSeasonTopic();
-            postPage.submitPost("teszt post", "[b]teszt[/b] szöveg");
+            documentService.postProcessedCases(postPage);
+
+            outputLogin.quit();
+            System.out.println("=== OUTPUT BROWSER CLOSED ===");
         };
     }
 }
