@@ -27,13 +27,17 @@ public class OutputPagePost extends BasePage {
         this.submitButton = By.xpath(locatorReader.get("output", "submitButton"));
     }
 
+    public void clickSeasonTopic() {
+        WebElement topicLink = waitForElement(
+                By.xpath("//a[contains(text(),'" + seasonTopicText + "')]"));
+        topicLink.click();
+    }
+
     public void navigateToSeasonTopic() {
         click(forumLink);
         switchToFrame(By.id("jfusioniframe"));
         waitForPresence(caseBoardLink).click();
-        WebElement topicLink = waitForElement(
-                By.xpath("//a[contains(text(),'" + seasonTopicText + "')]"));
-        topicLink.click();
+        clickSeasonTopic();
     }
 
     public void submitPost(String subject, String message) {
@@ -43,6 +47,6 @@ public class OutputPagePost extends BasePage {
         subjectEl.sendKeys(subject);
         sendKeys(messageField, message);
         click(submitButton);
-        System.out.println("=== POST SUBMITTED ===");
+        clickSeasonTopic();
     }
 }
