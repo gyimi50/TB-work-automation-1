@@ -5,7 +5,7 @@
 ### `db` – Database Layer
 - `DisciplinaryCase` – JPA entity, maps to database table
 - `DisciplinaryCaseRepository` – Spring Data repository, database operations
-- `DocumentService` – business logic: save from web, process files, BBCode conversion
+- `DocumentService` – business logic: save from web, process files, BBCode conversion, post to forum
 - `FileProcessorService` – iterates a directory and processes all supported files
 
 ### `document` – Document Processing Layer
@@ -18,20 +18,21 @@
 ### `selenium` – Browser Automation Layer
 - `BasePage` – abstract base: ChromeDriver init, explicit waits, iframe handling, JS executor
 - `YamlLocatorReader` – reads HTML locators from locators.yaml
+- `YamlConfigReader` – reads business config from config.yaml (season, type mapping)
 - `input/InputPageLogin` – handles login on input site
-- `input/InputPageDownload` – navigates, collects data, downloads files from input site
+- `input/InputPageDownload` – multi-page data collection with season filtering, file download
 - `output/OutputPageLogin` – handles login on output site (SMF forum)
 - `output/OutputPagePost` – navigates forum, finds season topic, submits post
 - `DisciplinaryData` – DTO: holds raw data collected from web before DB persistence
 
 ## Data Flow
-Input site → Login → Navigate → Collect data + Download files
+Input site → Login → Navigate → Multi-page collect + season filter + Download files
 ↓
 DocumentProcessor → BBCode conversion
 ↓
-PostgreSQL (Docker) → Store records
+PostgreSQL (Docker) → Store records (duplicate detection)
 ↓
-Output site → Login → Navigate to season topic → Submit post
+Output site → Login → Navigate to season topic → Iterate PROCESSED records → Submit posts
 
 ## Key Design Decisions
 - **Repository Pattern** – database layer abstracted behind interfaces, easily swappable (e.g. PostgreSQL → Supabase)
@@ -39,3 +40,5 @@ Output site → Login → Navigate to season topic → Submit post
 - **Modular Monolith** – clear separation of concerns without microservice complexity
 - **Separate WebDriver instances** – input and output flows use independent browser sessions
 - **iframe handling** – output site embeds SMF forum in iframe, handled transparently via BasePage
+- **Season-aware pagination** – iterates pages until old season cases found, filters current season only
+- **Config-driven** – season code and type mappings externalized to config.yaml, no hardcoding

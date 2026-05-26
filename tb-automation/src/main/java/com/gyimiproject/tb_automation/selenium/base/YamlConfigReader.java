@@ -30,4 +30,8 @@ public class YamlConfigReader {
     public String getSeasonTopic() {
         return (String) config.get("seasonTopic");
     }
+
+    public String getCurrentSeason() {
+        return (String) config.get("currentSeason");
+    }
 }
