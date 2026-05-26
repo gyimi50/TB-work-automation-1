@@ -13,6 +13,7 @@ import com.gyimiproject.tb_automation.selenium.DisciplinaryData;
 import org.springframework.beans.factory.annotation.Value;
 import java.util.List;
 import com.gyimiproject.tb_automation.selenium.output.OutputPagePost;
+import com.gyimiproject.tb_automation.selenium.base.YamlConfigReader;
 
 @SpringBootApplication
 public class TbAutomationApplication {
@@ -35,7 +36,8 @@ public class TbAutomationApplication {
 
     @Bean
     public CommandLineRunner run(YamlLocatorReader locatorReader,
-                                 DocumentService documentService) {
+                                 DocumentService documentService,
+                                 YamlConfigReader configReader) {
         return args -> {
             // INPUT FLOW
             InputPageLogin loginPage = new InputPageLogin(locatorReader);
@@ -47,7 +49,8 @@ public class TbAutomationApplication {
             downloadPage.setPageSizeTo100();
             System.out.println("=== NAVIGATED AND PAGE SIZE SET ===");
 
-            List<DisciplinaryData> data = downloadPage.collectAndSave();
+            List<DisciplinaryData> data = downloadPage.collectAndSave(
+                    configReader.getCurrentSeason());
             for (DisciplinaryData d : data) {
                 documentService.saveFromWeb(d);
             }

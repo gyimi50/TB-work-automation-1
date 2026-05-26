@@ -24,6 +24,7 @@ public class InputPageDownload extends BasePage {
     private final By pageLengthSelect = By.name("DataTables_Table_0_length");
     private final By processingIndicator = By.id("DataTables_Table_0_processing");
     private final By dataRow = By.cssSelector("tbody tr[role='row']");
+    private final By nextButton = By.cssSelector("a.paginate_button.next");
 
     public InputPageDownload(WebDriver driver, YamlLocatorReader locatorReader) {
         super(driver);
@@ -31,6 +32,16 @@ public class InputPageDownload extends BasePage {
         String caseTableClass = locatorReader.get("input", "caseTableClass");
         this.caseListLink = By.cssSelector("a[href='" + caseListPath + "']");
         this.caseTableCell = By.cssSelector("table." + caseTableClass + " tbody tr td");
+    }
+
+    private static class PageResult {
+        List<DisciplinaryData> data;
+        boolean foundOldCase;
+
+        PageResult(List<DisciplinaryData> data, boolean foundOldCase) {
+            this.data = data;
+            this.foundOldCase = foundOldCase;
+        }
     }
 
     public void navigateToCaseList() {
@@ -45,14 +56,46 @@ public class InputPageDownload extends BasePage {
         waitForRowCountAtLeast(dataRow, 1);
     }
 
-    public List<DisciplinaryData> collectAndSave() throws InterruptedException {
-        List<DisciplinaryData> results = new ArrayList<>();
+public List<DisciplinaryData> collectAndSave(String currentSeason) throws InterruptedException {
+    List<DisciplinaryData> allResults = new ArrayList<>();
+
+    while (true) {
         waitForElement(dataRow);
+        PageResult pageResult = collectPage(currentSeason);
+        allResults.addAll(pageResult.data);
 
-        List<WebElement> allRows = driver.findElements(By.cssSelector("tbody tr"));
+        if (pageResult.foundOldCase) {
+            System.out.println("=== FOUND OLD SEASON CASE, STOPPING ===");
+            break;
+        }
+
+        List<WebElement> nextButtons = driver.findElements(nextButton);
+        if (nextButtons.isEmpty() || nextButtons.get(0).getAttribute("class").contains("disabled")) {
+            System.out.println("=== NO MORE PAGES ===");
+            break;
+        }
+
+        nextButtons.get(0).click();
+        System.out.println("=== NAVIGATING TO NEXT PAGE ===");
+        waitForInvisibility(processingIndicator);
+        waitForRowCountAtLeast(dataRow, 1);
+    }
+
+    return allResults;
+}
+
+    private PageResult collectPage(String currentSeason) throws InterruptedException {
+        List<DisciplinaryData> results = new ArrayList<>();
         WebElement currentParentRow = null;
+        boolean foundOldCase = false;
 
-        for (WebElement tr : allRows) {
+        int rowCount = driver.findElements(By.cssSelector("tbody tr")).size();
+
+        for (int i = 0; i < rowCount; i++) {
+            List<WebElement> allRows = driver.findElements(By.cssSelector("tbody tr"));
+            if (i >= allRows.size()) break;
+            WebElement tr = allRows.get(i);
+
             String role = tr.getAttribute("role");
             String cls = tr.getAttribute("class");
 
@@ -85,6 +128,13 @@ public class InputPageDownload extends BasePage {
                             .filter(s -> s.startsWith("FEGY/"))
                             .collect(java.util.stream.Collectors.joining("\n"));
                     data.setCaseNumbers(caseNumbers);
+
+                    // season check
+                    if (!caseNumbers.isEmpty() && !caseNumbers.contains("/" + currentSeason + "/")) {
+                        foundOldCase = true;
+                        continue; // ne adja hozzá a results-hoz, ugrik a következő sorra
+                    }
+
                     data.setPersonInvolved(childTds.get(2).getText().trim());
                     data.setInvolvedType(childTds.get(3).getText().trim());
                     data.setOrganization(childTds.get(4).getText().trim());
@@ -130,7 +180,6 @@ public class InputPageDownload extends BasePage {
                         Files.copy(response.body(), targetPath,
                                 java.nio.file.StandardCopyOption.REPLACE_EXISTING);
                         data.setLocalFileName(fileName);
-
                     } catch (IOException e) {
                         System.out.println("=== DOWNLOAD ERROR: " + e.getMessage() + " ===");
                     }
@@ -139,6 +188,6 @@ public class InputPageDownload extends BasePage {
                 results.add(data);
             }
         }
-        return results;
+        return new PageResult(results, foundOldCase);
     }
 }
