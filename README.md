@@ -10,6 +10,7 @@ Automated document processing and publishing tool built with Java/Spring Boot.
 
 ## Features
 - Automated login and data collection from web interface
+- Multi-page iteration with season-aware filtering
 - Document download and processing (.docx, .odt, .doc)
 - Bold text extraction and BBCode conversion
 - PostgreSQL storage with duplicate detection
@@ -34,6 +35,15 @@ output.password=your_output_password
 
 Create `tb-automation/src/main/resources/locators.yaml`
 based on `locators.yaml.example`.
+
+Create `tb-automation/src/main/resources/config.yaml`
+based on the following structure:
+```yaml
+currentSeason: "your_season_code"
+involvedTypeMapping:
+  your_type: "your_output_value"
+seasonTopic: "your_season_topic"
+```
 
 ### Run
 ```bash
