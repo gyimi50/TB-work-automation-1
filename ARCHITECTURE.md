@@ -6,6 +6,7 @@
 - `DisciplinaryCase` – JPA entity, maps to database table
 - `DisciplinaryCaseRepository` – Spring Data repository, database operations
 - `DocumentService` – business logic: save from web, process files, BBCode conversion, post to forum
+- `DownloadService` – handles authenticated file downloads via HttpClient with session cookies
 - `FileProcessorService` – iterates a directory and processes all supported files
 
 ### `document` – Document Processing Layer
@@ -20,7 +21,7 @@
 - `YamlLocatorReader` – reads HTML locators from locators.yaml
 - `YamlConfigReader` – reads business config from config.yaml (season, type mapping)
 - `input/InputPageLogin` – handles login on input site
-- `input/InputPageDownload` – multi-page data collection with season filtering, file download
+- `input/InputPageDownload` – multi-page data collection with season filtering; decomposed into single-responsibility methods
 - `output/OutputPageLogin` – handles login on output site (SMF forum)
 - `output/OutputPagePost` – navigates forum, finds season topic, submits post
 - `DisciplinaryData` – DTO: holds raw data collected from web before DB persistence
@@ -42,3 +43,4 @@ Output site → Login → Navigate to season topic → Iterate PROCESSED records
 - **iframe handling** – output site embeds SMF forum in iframe, handled transparently via BasePage
 - **Season-aware pagination** – iterates pages until old season cases found, filters current season only
 - **Config-driven** – season code and type mappings externalized to config.yaml, no hardcoding
+- **Single Responsibility** – InputPageDownload decomposed into focused helper methods

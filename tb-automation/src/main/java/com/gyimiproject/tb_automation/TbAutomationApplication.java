@@ -5,6 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import com.gyimiproject.tb_automation.db.DocumentService;
+import com.gyimiproject.tb_automation.db.DownloadService;
 import com.gyimiproject.tb_automation.selenium.base.YamlLocatorReader;
 import com.gyimiproject.tb_automation.selenium.input.InputPageLogin;
 import com.gyimiproject.tb_automation.selenium.input.InputPageDownload;
@@ -37,14 +38,16 @@ public class TbAutomationApplication {
     @Bean
     public CommandLineRunner run(YamlLocatorReader locatorReader,
                                  DocumentService documentService,
-                                 YamlConfigReader configReader) {
+                                 YamlConfigReader configReader,
+                                 DownloadService downloadService) {
         return args -> {
             // INPUT FLOW
             InputPageLogin loginPage = new InputPageLogin(locatorReader);
             loginPage.login(inputUsername, inputPassword);
             System.out.println("=== INPUT LOGIN DONE ===");
 
-            InputPageDownload downloadPage = new InputPageDownload(loginPage.getDriver(), locatorReader);
+            InputPageDownload downloadPage = new InputPageDownload(
+                    loginPage.getDriver(), locatorReader, downloadService);
             downloadPage.navigateToCaseList();
             downloadPage.setPageSizeTo100();
             System.out.println("=== NAVIGATED AND PAGE SIZE SET ===");
