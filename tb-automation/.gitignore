@@ -3,7 +3,7 @@ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-tb-automation/src/main/resources/config.yaml
+src/main/resources/config.yaml
 
 ### STS ###
 .apt_generated

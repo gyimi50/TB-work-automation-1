@@ -22,3 +22,4 @@ test-files/backup/
 test-files/*.*
 tb-automation/src/main/resources/locators.yaml
 tb-automation/src/main/resources/application.properties
+tb-automation/src/main/resources/config.yaml
