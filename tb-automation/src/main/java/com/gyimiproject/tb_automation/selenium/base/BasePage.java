@@ -25,6 +25,7 @@ public abstract class BasePage {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--ignore-certificate-errors");
         options.addArguments("--no-sandbox");
+        options.addArguments("--window-position=2560,0");
         Map<String, Object> prefs = new HashMap<>();
         prefs.put("download.default_directory",
                 new File("../test-files").getAbsolutePath());
