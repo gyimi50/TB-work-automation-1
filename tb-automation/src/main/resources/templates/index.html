@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Case Handler</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<h1>Case Handler</h1>
+
+<div class="flow-buttons">
+    <form method="post" action="/run-input">
+        <button class="btn" type="submit">Input Flow</button>
+    </form>
+
+    <form method="post" action="/run-output">
+        <button class="btn" type="submit">Output Flow</button>
+    </form>
+
+    <form method="post" action="/run-full">
+        <button class="btn" type="submit">Full Flow</button>
+    </form>
+</div>
+
+<p class="status" th:text="${status}"></p>
+</body>
+</html>

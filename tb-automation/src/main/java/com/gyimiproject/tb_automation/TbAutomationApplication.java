@@ -12,8 +12,8 @@ public class TbAutomationApplication {
         SpringApplication.run(TbAutomationApplication.class, args);
     }
 
-    @Bean
-    public CommandLineRunner run(OrchestrationService orchestrationService) {
-        return args -> orchestrationService.runFullFlow();
-    }
+//    @Bean
+//    public CommandLineRunner run(OrchestrationService orchestrationService) {
+//        return args -> orchestrationService.runFullFlow();
+//    }
 }
