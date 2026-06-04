@@ -2,6 +2,9 @@
 
 ## Package Structure
 
+### `controller` – Web Layer
+- `HandlerController` – Thymeleaf UI controller: triggers input/output/full flows via browser buttons, serves BBCode copy feature with case list from DB
+
 ### `db` – Database Layer
 - `DisciplinaryCase` – JPA entity, maps to database table
 - `DisciplinaryCaseRepository` – Spring Data repository, database operations
@@ -44,3 +47,4 @@ Output site → Login → Navigate to season topic → Iterate PROCESSED records
 - **Season-aware pagination** – iterates pages until old season cases found, filters current season only
 - **Config-driven** – season code and type mappings externalized to config.yaml, no hardcoding
 - **Single Responsibility** – InputPageDownload decomposed into focused helper methods
+- **Handler Webapp** – Thymeleaf SSR frontend, no separate JS framework needed for simple trigger UI

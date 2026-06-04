@@ -56,12 +56,12 @@ public class OrchestrationService {
         System.out.println("=== NAVIGATED AND PAGE SIZE SET ===");
 
         List<DisciplinaryData> data = downloadPage.collectAndSave(
-                configReader.getCurrentSeason());
+                configReader.getCurrentSeason(), configReader.getTestFilesPath());
         for (DisciplinaryData d : data) {
             documentService.saveFromWeb(d);
         }
 
-        documentService.processPendingFiles("../test-files");
+        documentService.processPendingFiles(configReader.getTestFilesPath());
         System.out.println("=== PROCESSING DONE ===");
 
         loginPage.quit();

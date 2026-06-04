@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Case Handler</title>
+    <title>TB Handler</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 <body>
-<h1>Case Handler</h1>
+<h1>TB Handler</h1>
 
 <div class="flow-buttons">
     <form method="post" action="/run-input">
@@ -19,10 +19,38 @@
     </form>
 
     <form method="post" action="/run-full">
-        <button class="btn" type="submit">Full Flow</button>
+        <button class="btn" type="submit">Teljes Flow</button>
     </form>
 </div>
 
 <p class="status" th:text="${status}"></p>
+
+<div class="case-buttons" th:if="${not #lists.isEmpty(cases)}">
+    <h2>BBCode másolása</h2>
+    <div class="case-row" th:each="case : ${cases}">
+        <button class="btn btn-case"
+                th:text="${case.matchCode}"
+                th:data-bbcode="${case.bbcodeContent}"
+                onclick="copyBbcode(this)">
+        </button>
+        <button class="btn btn-title"
+                th:data-title="${titles[case.id]}"
+                onclick="copyTitle(this)">
+            Header
+        </button>
+    </div>
+</div>
+
+<script>
+    function copyBbcode(btn) {
+        const content = btn.getAttribute('data-bbcode');
+        navigator.clipboard.writeText(content);
+    }
+
+    function copyTitle(btn) {
+    const content = btn.getAttribute('data-title');
+    navigator.clipboard.writeText(content);
+    }
+</script>
 </body>
 </html>

@@ -15,6 +15,7 @@ Automated document processing and publishing tool built with Java/Spring Boot.
 - Bold text extraction and BBCode conversion
 - PostgreSQL storage with duplicate detection
 - Automated publishing to output platform via SMF forum
+- Handler webapp (Thymeleaf UI) with flow trigger buttons and BBCode clipboard copy
 
 ## Setup
 
@@ -43,6 +44,7 @@ currentSeason: "your_season_code"
 involvedTypeMapping:
   your_type: "your_output_value"
 seasonTopic: "your_season_topic"
+testFilesPath: "../test-files"
 ```
 
 ### Run

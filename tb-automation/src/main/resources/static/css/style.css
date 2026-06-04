@@ -66,3 +66,37 @@ h1 {
     color: #8a6f2e;
     text-transform: uppercase;
 }
+
+.case-buttons {
+    margin-top: 50px;
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.case-buttons h2 {
+    font-size: 1.2rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    color: #8a6f2e;
+}
+
+.case-row {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-case {
+    font-size: 0.95rem;
+    padding: 10px 24px;
+    flex: 5;
+}
+
+.btn-title {
+    font-size: 0.95rem;
+    padding: 10px;
+    flex: 1;
+}
