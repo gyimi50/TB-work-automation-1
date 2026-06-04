@@ -23,7 +23,6 @@ public class InputPageDownload extends BasePage {
     private final By dataRow = By.cssSelector("tbody tr[role='row']");
     private final By nextButton = By.cssSelector("a.paginate_button.next");
     private final DownloadService downloadService;
-    private static final String DOWNLOAD_DIR = "../test-files";
 
     public InputPageDownload(WebDriver driver, YamlLocatorReader locatorReader,
                              DownloadService downloadService) {
@@ -57,12 +56,12 @@ public class InputPageDownload extends BasePage {
         waitForRowCountAtLeast(dataRow, 1);
     }
 
-    public List<DisciplinaryData> collectAndSave(String currentSeason) throws InterruptedException {
+    public List<DisciplinaryData> collectAndSave(String currentSeason, String downloadDir) throws InterruptedException {
         List<DisciplinaryData> allResults = new ArrayList<>();
 
         while (true) {
             waitForElement(dataRow);
-            PageResult pageResult = collectPage(currentSeason);
+            PageResult pageResult = collectPage(currentSeason, downloadDir);
             allResults.addAll(pageResult.data);
 
             if (pageResult.foundOldCase) {
@@ -154,7 +153,7 @@ public class InputPageDownload extends BasePage {
         data.setDisciplinaryStatus(tds.get(7).getText().trim());
     }
 
-    private void downloadIfAvailable(WebElement childRow, DisciplinaryData data) {
+    private void downloadIfAvailable(WebElement childRow, DisciplinaryData data, String downloadDir) {
         List<WebElement> downloadLinks = childRow.findElements(By.cssSelector("span.download"));
         if (downloadLinks.isEmpty()) return;
 
@@ -163,11 +162,11 @@ public class InputPageDownload extends BasePage {
         data.setDownloadUrl(downloadUrl);
 
         Set<Cookie> cookies = driver.manage().getCookies();
-        String fileName = downloadService.downloadFile(downloadUrl, cookies, DOWNLOAD_DIR);
+        String fileName = downloadService.downloadFile(downloadUrl, cookies, downloadDir);
         data.setLocalFileName(fileName);
     }
 
-    private PageResult collectPage(String currentSeason) throws InterruptedException {
+    private PageResult collectPage(String currentSeason, String downloadDir) throws InterruptedException {
         List<DisciplinaryData> results = new ArrayList<>();
         WebElement currentParentRow = null;
         boolean foundOldCase = false;
@@ -180,7 +179,6 @@ public class InputPageDownload extends BasePage {
             if (isParentRow(tr)) {
                 currentParentRow = tr;
             } else if (isChildRow(tr) && currentParentRow != null) {
-
                 DisciplinaryData data = extractParentRowData(currentParentRow);
                 boolean isOldCase = extractCaseNumbers(tr, data, currentSeason);
                 if (isOldCase) {
@@ -188,7 +186,7 @@ public class InputPageDownload extends BasePage {
                     continue;
                 }
                 enrichChildData(tr, data);
-                downloadIfAvailable(tr, data);
+                downloadIfAvailable(tr, data, downloadDir);
                 results.add(data);
             }
         }

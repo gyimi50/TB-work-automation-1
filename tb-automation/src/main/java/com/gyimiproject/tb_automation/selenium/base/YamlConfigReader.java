@@ -21,6 +21,10 @@ public class YamlConfigReader {
         }
     }
 
+    public String getTestFilesPath() {
+        return (String) config.get("testFilesPath");
+    }
+
     public String getInvolvedTypeOutput(String involvedType) {
         if (involvedType == null) return "";
         Map<String, String> mapping = (Map<String, String>) config.get("involvedTypeMapping");

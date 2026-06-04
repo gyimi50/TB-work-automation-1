@@ -13,4 +13,5 @@ public interface DisciplinaryCaseRepository
     );
     boolean existsByLocalFileName(String localFileName);
     boolean existsByMatchCodeAndCaseNumbers(String matchCode, String caseNumbers);
+    List<DisciplinaryCase> findByBbcodeContentIsNotNull();
 }
