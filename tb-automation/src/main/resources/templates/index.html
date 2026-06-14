@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>TB Handler</title>
+    <title>Case Handler</title>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
@@ -20,6 +20,18 @@
 
     <form method="post" action="/run-full">
         <button class="btn" type="submit">Teljes Flow</button>
+    </form>
+
+    <form method="post" action="/import-personal-records">
+        <button class="btn" type="submit">Import Personal Records</button>
+    </form>
+
+    <form method="post" action="/run-reports">
+        <button class="btn" type="submit">Reports Flow</button>
+    </form>
+
+    <form method="post" action="/run-writeback">
+        <button class="btn" type="submit">Write Back</button>
     </form>
 </div>
 

@@ -100,3 +100,178 @@ h1 {
     padding: 10px;
     flex: 1;
 }
+
+.records-table {
+    width: 100%;
+    max-width: 900px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.record-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #2a2a2a;
+    padding: 12px 16px;
+    gap: 16px;
+}
+
+.record-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.record-player {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #c9a84c;
+}
+
+.record-meta {
+    font-size: 0.8rem;
+    color: #555;
+    letter-spacing: 1px;
+}
+
+.record-teams {
+    font-size: 0.85rem;
+    color: #888;
+}
+
+.record-team {
+    font-size: 0.85rem;
+    color: #c9a84c;
+    font-weight: 600;
+}
+
+.record-actions {
+    display: flex;
+    align-items: center;
+}
+
+.record-actions form {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.btn-delete {
+    border-color: #8b0000;
+    color: #8b0000;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+}
+
+.btn-delete:hover {
+    background-color: #8b0000;
+    color: #0a0a0a;
+}
+
+.reports-list {
+    width: 100%;
+    max-width: 1100px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.report-card {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.report-card-odd {
+    background-color: #0a0a0a;
+    color: #c9a84c;
+}
+
+.report-card-even {
+    background-color: #c9a84c;
+    color: #0a0a0a;
+}
+
+.report-card-even .report-text {
+    border-color: #0a0a0a;
+    color: #0a0a0a;
+}
+
+.report-header {
+    display: flex;
+    gap: 24px;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 2px;
+}
+
+.report-text {
+    border: 1px solid #c9a84c;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+    letter-spacing: 0;
+    font-weight: 400;
+}
+
+.report-actions .btn {
+    width: auto;
+    padding: 8px 20px;
+}
+
+.btn-ignore {
+    border-color: #555;
+    color: #555;
+}
+
+.btn-ignore:hover {
+    background-color: #555;
+    color: #0a0a0a;
+}
+
+.btn-disciplinary {
+    border-color: #8b0000;
+    color: #8b0000;
+}
+
+.btn-disciplinary:hover {
+    background-color: #8b0000;
+    color: #0a0a0a;
+}
+
+.btn-register {
+    border-color: #2fcc71;
+    color: #2fcc71;
+}
+
+.btn-register:hover {
+    background-color: #2fcc71;
+    color: #0a0a0a;
+}
+
+.register-form {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 400px;
+}
+
+.input-field {
+    background-color: transparent;
+    border: 1px solid #c9a84c;
+    color: #c9a84c;
+    padding: 10px 14px;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    width: 100%;
+}
+
+.input-field::placeholder {
+    color: #555;
+}
