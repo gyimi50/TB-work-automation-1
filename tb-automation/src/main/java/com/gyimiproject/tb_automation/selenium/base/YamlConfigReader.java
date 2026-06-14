@@ -5,6 +5,7 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;
 import java.util.Map;
+import java.time.LocalDateTime;
 
 @Component
 public class YamlConfigReader {
@@ -37,5 +38,21 @@ public class YamlConfigReader {
 
     public String getCurrentSeason() {
         return (String) config.get("currentSeason");
+    }
+
+    public LocalDateTime getReportsCutoffDate() {
+        return LocalDateTime.parse((String) config.get("reportsCutoffDate"));
+    }
+
+    public String getRegistrationText() {
+        return (String) config.get("registrationText");
+    }
+
+    public String getRegistrationColor() {
+        return (String) config.get("registrationColor");
+    }
+
+    public String getPersonalRecordsCsvPath() {
+        return (String) config.get("personalRecordsCsvPath");
     }
 }

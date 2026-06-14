@@ -11,6 +11,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 import java.time.Duration;
 
@@ -90,5 +91,46 @@ public abstract class BasePage {
         if (driver != null) {
             driver.quit();
         }
+    }
+    protected void jsClick(WebElement element) {
+        ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+    }
+
+    protected boolean isParentRow(WebElement tr) {
+        return "row".equals(tr.getAttribute("role"));
+    }
+
+    protected boolean isChildRow(WebElement tr) {
+        String cls = tr.getAttribute("class");
+        return cls != null && cls.contains("child_row");
+    }
+
+    protected int getRowCount() {
+        return driver.findElements(By.cssSelector("tbody tr")).size();
+    }
+
+    protected WebElement getRow(int index) {
+        List<WebElement> rows = driver.findElements(By.cssSelector("tbody tr"));
+        return index < rows.size() ? rows.get(index) : null;
+    }
+
+    protected boolean hasNextPage(By nextButton) {
+        List<WebElement> buttons = driver.findElements(nextButton);
+        return !buttons.isEmpty() && !buttons.get(0).getAttribute("class").contains("disabled");
+    }
+
+    protected void goToNextPage(By nextButton) {
+        driver.findElements(nextButton).get(0).click();
+        System.out.println("=== NAVIGATING TO NEXT PAGE ===");
+        waitForInvisibility(By.id("DataTables_Table_0_processing"));
+        waitForRowCountAtLeast(By.cssSelector("tbody tr[role='row']"), 1);
+    }
+
+    public void setPageSizeTo100() {
+        By pageLengthSelect = By.name("DataTables_Table_0_length");
+        waitForElement(pageLengthSelect);
+        new org.openqa.selenium.support.ui.Select(driver.findElement(pageLengthSelect)).selectByValue("100");
+        waitForInvisibility(By.id("DataTables_Table_0_processing"));
+        waitForRowCountAtLeast(By.cssSelector("tbody tr[role='row']"), 1);
     }
 }

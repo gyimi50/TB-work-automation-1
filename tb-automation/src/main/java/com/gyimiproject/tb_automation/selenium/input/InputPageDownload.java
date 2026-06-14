@@ -8,7 +8,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Select;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,9 +17,6 @@ public class InputPageDownload extends BasePage {
 
     private final By caseListLink;
     private final By caseTableCell;
-    private final By pageLengthSelect = By.name("DataTables_Table_0_length");
-    private final By processingIndicator = By.id("DataTables_Table_0_processing");
-    private final By dataRow = By.cssSelector("tbody tr[role='row']");
     private final By nextButton = By.cssSelector("a.paginate_button.next");
     private final DownloadService downloadService;
 
@@ -48,19 +44,11 @@ public class InputPageDownload extends BasePage {
         click(caseListLink);
     }
 
-    public void setPageSizeTo100() {
-        waitForElement(pageLengthSelect);
-        Select select = new Select(driver.findElement(pageLengthSelect));
-        select.selectByValue("100");
-        waitForInvisibility(processingIndicator);
-        waitForRowCountAtLeast(dataRow, 1);
-    }
-
     public List<DisciplinaryData> collectAndSave(String currentSeason, String downloadDir) throws InterruptedException {
         List<DisciplinaryData> allResults = new ArrayList<>();
 
         while (true) {
-            waitForElement(dataRow);
+            waitForElement(By.cssSelector("tbody tr[role='row']"));
             PageResult pageResult = collectPage(currentSeason, downloadDir);
             allResults.addAll(pageResult.data);
 
@@ -69,45 +57,15 @@ public class InputPageDownload extends BasePage {
                 break;
             }
 
-            if (!hasNextPage()) {
+            if (!hasNextPage(nextButton)) {
                 System.out.println("=== NO MORE PAGES ===");
                 break;
             }
 
-            goToNextPage();
+            goToNextPage(nextButton);
         }
 
         return allResults;
-    }
-
-    private boolean hasNextPage() {
-        List<WebElement> buttons = driver.findElements(nextButton);
-        return !buttons.isEmpty() && !buttons.get(0).getAttribute("class").contains("disabled");
-    }
-
-    private void goToNextPage() {
-        driver.findElements(nextButton).get(0).click();
-        System.out.println("=== NAVIGATING TO NEXT PAGE ===");
-        waitForInvisibility(processingIndicator);
-        waitForRowCountAtLeast(dataRow, 1);
-    }
-
-    private int getRowCount() {
-        return driver.findElements(By.cssSelector("tbody tr")).size();
-    }
-
-    private WebElement getRow(int index) {
-        List<WebElement> rows = driver.findElements(By.cssSelector("tbody tr"));
-        return index < rows.size() ? rows.get(index) : null;
-    }
-
-    private boolean isParentRow(WebElement tr) {
-        return "row".equals(tr.getAttribute("role"));
-    }
-
-    private boolean isChildRow(WebElement tr) {
-        String cls = tr.getAttribute("class");
-        return cls != null && cls.contains("child_row");
     }
 
     private DisciplinaryData extractParentRowData(WebElement parentRow) {
