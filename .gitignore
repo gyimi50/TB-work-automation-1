@@ -25,3 +25,6 @@ tb-automation/src/main/resources/application.properties
 tb-automation/src/main/resources/config.yaml
 test-files/*
 !test-files/.gitkeep
+tb-automation/src/main/resources/application-prod.properties
+tb-automation/src/main/resources/application-dev.properties
+tbautomation_backup.sql

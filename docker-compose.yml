@@ -1,17 +1,32 @@
 services:
-  postgres:
+  postgres-prod:
     image: postgres:16
-    container_name: tb-automation-db
+    container_name: tb-automation-db-prod
     env_file:
       - .env
     environment:
-      POSTGRES_DB: tbautomation
+      POSTGRES_DB: tbautomation_prod
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_prod:/var/lib/postgresql/data
+
+  postgres-dev:
+    image: postgres:16
+    container_name: tb-automation-db-dev
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: tbautomation_dev
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
 
 volumes:
-  postgres_data:
+  postgres_data_prod:
+  postgres_data_dev:
