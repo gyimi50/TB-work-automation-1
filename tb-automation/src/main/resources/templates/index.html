@@ -7,33 +7,29 @@
     <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
 <body>
-<h1>TB Handler</h1>
+<h1>Case Handler</h1>
 
-<div class="flow-buttons">
+<nav class="top-nav">
     <form method="post" action="/run-input">
-        <button class="btn" type="submit">Input Flow</button>
+        <button class="btn btn-nav" type="submit">Input Flow</button>
     </form>
-
     <form method="post" action="/run-output">
-        <button class="btn" type="submit">Output Flow</button>
+        <button class="btn btn-nav" type="submit">Output Flow</button>
     </form>
-
     <form method="post" action="/run-full">
-        <button class="btn" type="submit">Teljes Flow</button>
+        <button class="btn btn-nav" type="submit">Full Flow</button>
     </form>
-
-    <form method="post" action="/import-personal-records">
-        <button class="btn" type="submit">Import Personal Records</button>
-    </form>
-
     <form method="post" action="/run-reports">
-        <button class="btn" type="submit">Reports Flow</button>
+        <button class="btn btn-nav" type="submit">Reports Flow</button>
     </form>
-
+    <a href="/reports" class="btn btn-nav">Report Overview</a>
     <form method="post" action="/run-writeback">
-        <button class="btn" type="submit">Write Back</button>
+        <button class="btn btn-nav" type="submit">Write Back</button>
     </form>
-</div>
+    <form method="post" action="/import-personal-records">
+        <button class="btn btn-nav" type="submit">Import</button>
+    </form>
+</nav>
 
 <p class="status" th:text="${status}"></p>
 
@@ -55,14 +51,16 @@
 
 <script>
     function copyBbcode(btn) {
-        const content = btn.getAttribute('data-bbcode');
-        navigator.clipboard.writeText(content);
-    }
+    const content = btn.getAttribute('data-bbcode');
+    navigator.clipboard.writeText(content);
+    btn.classList.toggle('clicked');
+}
 
-    function copyTitle(btn) {
+function copyTitle(btn) {
     const content = btn.getAttribute('data-title');
     navigator.clipboard.writeText(content);
-    }
+    btn.classList.toggle('clicked');
+}
 </script>
 </body>
 </html>
