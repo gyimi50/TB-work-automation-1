@@ -1,5 +1,6 @@
 package com.gyimiproject.tb_automation.selenium.base;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.yaml.snakeyaml.Yaml;
 
@@ -12,13 +13,17 @@ public class YamlConfigReader {
 
     private final Map<String, Object> config;
 
-    public YamlConfigReader() {
+    public YamlConfigReader(@Value("${spring.profiles.active:prod}") String profile) {
+        String configFile = "config-" + profile + ".yaml";
         Yaml yaml = new Yaml();
         try (InputStream is = getClass().getClassLoader()
-                .getResourceAsStream("config.yaml")) {
+                .getResourceAsStream(configFile)) {
+            if (is == null) {
+                throw new RuntimeException("Config file not found: " + configFile);
+            }
             config = yaml.load(is);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to load config.yaml", e);
+            throw new RuntimeException("Failed to load " + configFile, e);
         }
     }
 

@@ -22,9 +22,11 @@ test-files/backup/
 test-files/*.*
 tb-automation/src/main/resources/locators.yaml
 tb-automation/src/main/resources/application.properties
-tb-automation/src/main/resources/config.yaml
+tb-automation/src/main/resources/config-prod.yaml
 test-files/*
 !test-files/.gitkeep
 tb-automation/src/main/resources/application-prod.properties
 tb-automation/src/main/resources/application-dev.properties
 tbautomation_backup.sql
+tb-automation/src/main/resources/config-prod.yaml
+tb-automation/src/main/resources/config-dev.yaml
